@@ -66,10 +66,10 @@ function paginate(query, options, callback) {
     }
   }
   promises = Object.keys(promises).map((x) => promises[x]);
-  return Promise.all(promises).then((data) => {
+  return Promise.all(promises).then(([docs, count]) => {
     let result = {
-      docs: data.docs,
-      total: data.count,
+      docs: docs,
+      total: count,
       limit: limit
     };
     if (offset !== undefined) {
@@ -77,7 +77,7 @@ function paginate(query, options, callback) {
     }
     if (page !== undefined) {
       result.page = page;
-      result.pages = Math.ceil(data.count / limit) || 1;
+      result.pages = Math.ceil(count / limit) || 1;
     }
     if (typeof callback === 'function') {
       return callback(null, result);
@@ -134,10 +134,10 @@ function paginateWithDeleted(query, options, callback) {
     }
   }
   promises = Object.keys(promises).map((x) => promises[x]);
-  return Promise.all(promises).then((data) => {
+  return Promise.all(promises).then(([docs, count]) => {
     let result = {
-      docs: data.docs,
-      total: data.count,
+      docs: docs,
+      total: count,
       limit: limit
     };
     if (offset !== undefined) {
@@ -145,7 +145,7 @@ function paginateWithDeleted(query, options, callback) {
     }
     if (page !== undefined) {
       result.page = page;
-      result.pages = Math.ceil(data.count / limit) || 1;
+      result.pages = Math.ceil(count / limit) || 1;
     }
     if (typeof callback === 'function') {
       return callback(null, result);
