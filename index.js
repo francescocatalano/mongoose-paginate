@@ -73,7 +73,7 @@ function paginate(query, options, callback) {
   promises = Object.keys(promises).map((x) => promises[x]);
   return Promise.all(promises).then(([docs, count]) => {
     let result = {
-      docs: docs,
+      items: docs,
       total: count,
       limit: limit
     };
@@ -81,7 +81,7 @@ function paginate(query, options, callback) {
       result.offset = offset;
     }
     if (page !== undefined) {
-      result.page = page;
+      result.current_page = page;
       result.pages = Math.ceil(count / limit) || 1;
     }
     if (typeof callback === 'function') {
