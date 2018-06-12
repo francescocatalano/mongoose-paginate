@@ -42,7 +42,7 @@ function paginate(query, options, callback) {
   }
 
   for (var key in query) {
-      reQuery[key] = new RegExp(query[key]);
+      reQuery[key] = new RegExp(query[key], 'i');
   }
 
   if (limit) {
