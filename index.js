@@ -28,7 +28,7 @@ function paginate(query, options, callback) {
   let lean = options.lean || false;
   let leanWithId = options.leanWithId ? options.leanWithId : true;
   let limit = options.limit ? options.limit : 10;
-  let page, offset, skip, promises;
+  let page, offset, skip, promises, reQuery = {};
   if (options.offset) {
     offset = options.offset;
     skip = offset;
@@ -40,8 +40,13 @@ function paginate(query, options, callback) {
     offset = 0;
     skip = offset;
   }
+
+  for (var key in query) {
+      reQuery[key] = new RegExp(query[key]);
+  }
+
   if (limit) {
-    let docsQuery = this.find(query)
+    let docsQuery = this.find(reQuery)
       .select(select)
       .sort(sort)
       .skip(skip)
@@ -54,7 +59,7 @@ function paginate(query, options, callback) {
     }
     promises = {
       docs: docsQuery.exec(),
-      count: this.count(query).exec()
+      count: this.count(reQuery).exec()
     };
     if (lean && leanWithId) {
       promises.docs = promises.docs.then((docs) => {
